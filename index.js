@@ -1,23 +1,19 @@
-import jsonfile from "jsonfile";
+import fs from "fs";
 import moment from "moment";
 import simpleGit from "simple-git";
-import random from "random";
 
-const path = "./data.json";
+const path = "./dummy.txt";
 // Set date to 25th July 2025
 const targetDate = moment("2025-07-25").format();
 
 const makeCommits = (n) => {
-    if(n === 0) return simpleGit().push();
+    if (n === 0) return simpleGit().push();
     // Use the fixed date instead of random
     const date = targetDate;
-    const data = {
-        date: date,
-    };
+    // Append a line to dummy.txt to create a change
+    fs.appendFileSync(path, `Commit on ${date}\n`);
     console.log(date);
-    jsonfile.writeFile(path, data, () => {
-        simpleGit().add([path]).commit(date, { "--date": date }, makeCommits.bind(this,--n));
-    });
+    simpleGit().add([path]).commit(date, { "--date": date }, makeCommits.bind(this, --n));
 };
 
 makeCommits(1);
