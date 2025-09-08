@@ -4,13 +4,13 @@ import simpleGit from "simple-git";
 import random from "random";
 
 const path = "./data.json";
-const date = moment().subtract(5, 'days').format();
+// Set date to 25th July 2025
+const targetDate = moment("2025-07-25").format();
 
 const makeCommits = (n) => {
     if(n === 0) return simpleGit().push();
-    const x = random.int(0, 54);
-    const y = random.int(0, 6);
-    const date = moment().subtract(1, "y").add(1, "d").add(x, "w").add(y, "d").format();
+    // Use the fixed date instead of random
+    const date = targetDate;
     const data = {
         date: date,
     };
