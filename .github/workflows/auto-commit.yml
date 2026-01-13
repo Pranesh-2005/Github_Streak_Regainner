@@ -1,0 +1,35 @@
+name: Auto Commit If No Activity
+
+on:
+  schedule:
+    - cron: "15 18 * * *" # 11:45 PM IST
+  workflow_dispatch:
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Check if commit exists today
+        id: check
+        run: |
+          TODAY=$(date -u +"%Y-%m-%d")
+          COMMITS=$(git log --since="$TODAY 00:00" --until="$TODAY 23:59" --oneline | wc -l)
+          echo "commits=$COMMITS" >> $GITHUB_OUTPUT
+
+      - name: Create commit if none today
+        if: steps.check.outputs.commits == '0'
+        run: |
+          DATE=$(TZ=Asia/Kolkata date +"%Y-%m-%d %H:%M:%S IST")
+          echo "Auto commit on $DATE" >> dummy.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dummy.txt
+          git commit -m "chore: auto commit on $DATE"
+          git push
