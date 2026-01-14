@@ -5,6 +5,9 @@ on:
     - cron: "15 18 * * *" # 11:45 PM IST
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   auto-commit:
     runs-on: ubuntu-latest
