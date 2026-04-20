@@ -4,7 +4,7 @@ import simpleGit from "simple-git";
 
 const path = "./dummy.txt";
 
-const date = moment("2026-03-27").format();
+const date = moment("2026-04-16").format();
 
 fs.appendFileSync(path, `Commit on ${date}\n`);
 console.log(date);
